@@ -4,7 +4,7 @@ plugins {
     id("xyz.jpenilla.run-paper") version "3.0.2"
 }
 
-group = "me.moormxi"
+group = "com.github.sxnsh1ness"
 version = "1.0.0"
 
 publishing {

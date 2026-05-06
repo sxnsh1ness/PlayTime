@@ -1,4 +1,4 @@
-package me.moormxi.playtime.event;
+package com.github.sxnsh1ness.playtime.event;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

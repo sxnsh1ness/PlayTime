@@ -1,4 +1,4 @@
-package me.moormxi.playtime.api;
+package com.github.sxnsh1ness.playtime.api;
 
 import java.time.Duration;
 import java.time.Instant;

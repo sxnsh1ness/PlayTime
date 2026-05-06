@@ -1,6 +1,6 @@
-package me.moormxi.playtime.database;
+package com.github.sxnsh1ness.playtime.database;
 
-import me.moormxi.playtime.OceanPlaytimePlugin;
+import com.github.sxnsh1ness.playtime.PlaytimePlugin;
 
 import java.io.File;
 import java.sql.Connection;
@@ -17,11 +17,11 @@ import java.util.logging.Level;
 
 public final class DatabaseManager implements AutoCloseable {
 
-    private final OceanPlaytimePlugin plugin;
+    private final PlaytimePlugin plugin;
     private final String url;
     private Connection connection;
 
-    public DatabaseManager(OceanPlaytimePlugin plugin) {
+    public DatabaseManager(PlaytimePlugin plugin) {
         this.plugin = plugin;
         if (!plugin.getDataFolder().exists() && !plugin.getDataFolder().mkdirs()) {
             plugin.getLogger().warning("Could not create plugin data folder: " + plugin.getDataFolder());

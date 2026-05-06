@@ -1,8 +1,8 @@
-package me.moormxi.playtime.placeholder;
+package com.github.sxnsh1ness.playtime.placeholder;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.moormxi.playtime.OceanPlaytimePlugin;
-import me.moormxi.playtime.database.DatabaseManager;
+import com.github.sxnsh1ness.playtime.PlaytimePlugin;
+import com.github.sxnsh1ness.playtime.database.DatabaseManager;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,25 +11,25 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public final class OceanPlaytimeExpansion extends PlaceholderExpansion {
+public final class PlaytimeExpansion extends PlaceholderExpansion {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             .withZone(ZoneId.systemDefault());
 
-    private final OceanPlaytimePlugin plugin;
+    private final PlaytimePlugin plugin;
 
-    public OceanPlaytimeExpansion(OceanPlaytimePlugin plugin) {
+    public PlaytimeExpansion(PlaytimePlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public @NotNull String getIdentifier() {
-        return "oceanplaytime";
+        return "Playtime";
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return "moormxi";
+        return "sxnsh1ness";
     }
 
     @Override

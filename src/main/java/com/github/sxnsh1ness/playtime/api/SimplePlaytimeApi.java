@@ -1,7 +1,7 @@
-package me.moormxi.playtime.api;
+package com.github.sxnsh1ness.playtime.api;
 
-import me.moormxi.playtime.database.DatabaseManager;
-import me.moormxi.playtime.manager.PlaytimeManager;
+import com.github.sxnsh1ness.playtime.database.DatabaseManager;
+import com.github.sxnsh1ness.playtime.manager.PlaytimeManager;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public final class SimpleOceanPlaytimeApi implements OceanPlaytimeApi {
+public final class SimplePlaytimeApi implements PlaytimeApi {
 
     private final PlaytimeManager playtimeManager;
     private final DatabaseManager databaseManager;
 
-    public SimpleOceanPlaytimeApi(PlaytimeManager playtimeManager, DatabaseManager databaseManager) {
+    public SimplePlaytimeApi(PlaytimeManager playtimeManager, DatabaseManager databaseManager) {
         this.playtimeManager = playtimeManager;
         this.databaseManager = databaseManager;
     }

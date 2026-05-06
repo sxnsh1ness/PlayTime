@@ -1,6 +1,6 @@
-package me.moormxi.playtime.config;
+package com.github.sxnsh1ness.playtime.config;
 
-import me.moormxi.playtime.OceanPlaytimePlugin;
+import com.github.sxnsh1ness.playtime.PlaytimePlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,7 +14,7 @@ public final class PluginSettings {
 
     private static final long MIN_AUTOSAVE_SECONDS = 30L;
 
-    private final OceanPlaytimePlugin plugin;
+    private final PlaytimePlugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     private long autosaveIntervalSeconds;
@@ -29,7 +29,7 @@ public final class PluginSettings {
     private String secondsFormat;
     private String separator;
 
-    public PluginSettings(OceanPlaytimePlugin plugin) {
+    public PluginSettings(PlaytimePlugin plugin) {
         this.plugin = plugin;
     }
 

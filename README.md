@@ -1,13 +1,13 @@
-# OceanPlaytime
+# Playtime
 
-OceanPlaytime is a standalone Paper plugin for tracking how long players have played on a server.
+Playtime is a standalone Paper plugin for tracking how long players have played on a server.
 
 The plugin stores data in SQLite, provides `/playtime` commands, PlaceholderAPI placeholders, custom Bukkit events, and a small developer API for reward plugins and other integrations.
 
 ## Features
 
 - Tracks playtime from the player's first join.
-- Saves data to SQLite: `plugins/OceanPlaytime/playtime.db`.
+- Saves data to SQLite: `plugins/Playtime/playtime.db`.
 - Saves on quit, server shutdown, and by configurable autosave interval.
 - Commands:
   - `/playtime`
@@ -42,7 +42,7 @@ gradlew.bat build
 2. Put the jar into your server `plugins` folder:
 
 ```text
-build/libs/OceanPlaytime-1.0.0.jar
+build/libs/Playtime-1.0.0.jar
 ```
 
 3. Restart the server.
@@ -86,46 +86,46 @@ Messages support MiniMessage formatting.
 
 ## PlaceholderAPI
 
-If PlaceholderAPI is installed, OceanPlaytime registers the `oceanplaytime` expansion automatically.
+If PlaceholderAPI is installed, Playtime registers the `Playtime` expansion automatically.
 
 Available placeholders:
 
 | Placeholder | Description |
 | --- | --- |
-| `%oceanplaytime_time%` | Formatted playtime. |
-| `%oceanplaytime_formatted%` | Same as `time`. |
-| `%oceanplaytime_millis%` | Total playtime in milliseconds. |
-| `%oceanplaytime_seconds%` | Total playtime in seconds. |
-| `%oceanplaytime_minutes%` | Total playtime in minutes. |
-| `%oceanplaytime_hours%` | Total playtime in hours. |
-| `%oceanplaytime_days%` | Total playtime in days. |
-| `%oceanplaytime_first_join%` | First tracked join time. |
-| `%oceanplaytime_last_seen%` | Last seen time. |
+| `%Playtime_time%` | Formatted playtime. |
+| `%Playtime_formatted%` | Same as `time`. |
+| `%Playtime_millis%` | Total playtime in milliseconds. |
+| `%Playtime_seconds%` | Total playtime in seconds. |
+| `%Playtime_minutes%` | Total playtime in minutes. |
+| `%Playtime_hours%` | Total playtime in hours. |
+| `%Playtime_days%` | Total playtime in days. |
+| `%Playtime_first_join%` | First tracked join time. |
+| `%Playtime_last_seen%` | Last seen time. |
 
 Example reward condition in another plugin:
 
 ```text
-%oceanplaytime_hours% >= 10
+%Playtime_hours% >= 10
 ```
 
 ## Developer API
 
-OceanPlaytime exposes its API through Bukkit `ServicesManager`.
+Playtime exposes its API through Bukkit `ServicesManager`.
 
-Add OceanPlaytime as a compile-only dependency in your plugin project, then declare a soft dependency in your `plugin.yml`.
+Add Playtime as a compile-only dependency in your plugin project, then declare a soft dependency in your `plugin.yml`.
 
 ```yaml
 softdepend:
-  - OceanPlaytime
+  - Playtime
 ```
 
 ### Getting the API
 
 ```java
-import me.moormxi.playtime.api.OceanPlaytimeApi;
-import me.moormxi.playtime.api.OceanPlaytimeProvider;
+import com.github.sxnsh1ness.playtime.api.PlaytimeApi;
+import com.github.sxnsh1ness.playtime.api.PlaytimeProvider;
 
-OceanPlaytimeProvider.get().ifPresent(api -> {
+PlaytimeProvider.get().ifPresent(api -> {
     long millis = api.getPlaytimeMillis(player.getUniqueId());
 });
 ```
@@ -133,7 +133,7 @@ OceanPlaytimeProvider.get().ifPresent(api -> {
 Or directly through Bukkit:
 
 ```java
-OceanPlaytimeApi api = Bukkit.getServicesManager().load(OceanPlaytimeApi.class);
+PlaytimeApi api = Bukkit.getServicesManager().load(PlaytimeApi.class);
 if (api == null) {
     return;
 }
@@ -155,10 +155,10 @@ List<PlayerPlaytime> getTop(int limit);
 ### Reward Example
 
 ```java
-import me.moormxi.playtime.api.OceanPlaytimeProvider;
+import com.github.sxnsh1ness.playtime.api.PlaytimeProvider;
 
 public void tryGiveReward(Player player) {
-    OceanPlaytimeProvider.get().ifPresent(api -> {
+    PlaytimeProvider.get().ifPresent(api -> {
         if (api.getPlaytime(player.getUniqueId()).toHours() >= 10) {
             // Give a reward for 10 hours of playtime.
         }
@@ -189,11 +189,11 @@ for (PlayerPlaytime entry : api.getTop(10)) {
 
 ## Custom Events
 
-OceanPlaytime also exposes Bukkit events for developers who need to react to playtime changes.
+Playtime also exposes Bukkit events for developers who need to react to playtime changes.
 
 ### PlayerPlaytimeStartEvent
 
-Called when OceanPlaytime starts tracking a player's current session.
+Called when Playtime starts tracking a player's current session.
 
 ```java
 @EventHandler
@@ -239,5 +239,5 @@ public void onPlaytimeStop(PlayerPlaytimeStopEvent event) {
 The compiled jar will be created in:
 
 ```text
-build/libs/OceanPlaytime-1.0.0.jar
+build/libs/Playtime-1.0.0.jar
 ```

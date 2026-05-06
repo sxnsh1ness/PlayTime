@@ -1,6 +1,6 @@
-name: OceanPlaytime
+name: Playtime
 version: 1.0.0
-main: me.moormxi.playtime.OceanPlaytimePlugin
+main: com.github.sxnsh1ness.playtime.PlaytimePlugin
 api-version: '1.21'
 description: Standalone Playtime Tracking Plugin
 softdepend:

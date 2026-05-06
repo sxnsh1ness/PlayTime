@@ -1,9 +1,9 @@
-package me.moormxi.playtime.manager;
+package com.github.sxnsh1ness.playtime.manager;
 
-import me.moormxi.playtime.OceanPlaytimePlugin;
-import me.moormxi.playtime.event.PlayerPlaytimeSaveEvent;
-import me.moormxi.playtime.event.PlayerPlaytimeStartEvent;
-import me.moormxi.playtime.event.PlayerPlaytimeStopEvent;
+import com.github.sxnsh1ness.playtime.PlaytimePlugin;
+import com.github.sxnsh1ness.playtime.event.PlayerPlaytimeSaveEvent;
+import com.github.sxnsh1ness.playtime.event.PlayerPlaytimeStartEvent;
+import com.github.sxnsh1ness.playtime.event.PlayerPlaytimeStopEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -17,10 +17,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public final class PlaytimeManager {
 
-    private final OceanPlaytimePlugin plugin;
+    private final PlaytimePlugin plugin;
     private final Map<UUID, Session> sessions = new ConcurrentHashMap<>();
 
-    public PlaytimeManager(OceanPlaytimePlugin plugin) {
+    public PlaytimeManager(PlaytimePlugin plugin) {
         this.plugin = plugin;
     }
 

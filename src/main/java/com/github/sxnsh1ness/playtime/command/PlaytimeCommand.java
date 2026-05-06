@@ -1,8 +1,8 @@
-package me.moormxi.playtime.command;
+package com.github.sxnsh1ness.playtime.command;
 
-import me.moormxi.playtime.OceanPlaytimePlugin;
-import me.moormxi.playtime.database.DatabaseManager;
-import me.moormxi.playtime.manager.PlaytimeManager;
+import com.github.sxnsh1ness.playtime.PlaytimePlugin;
+import com.github.sxnsh1ness.playtime.database.DatabaseManager;
+import com.github.sxnsh1ness.playtime.manager.PlaytimeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,10 +18,10 @@ import java.util.UUID;
 
 public final class PlaytimeCommand implements CommandExecutor, TabCompleter {
 
-    private final OceanPlaytimePlugin plugin;
+    private final PlaytimePlugin plugin;
     private final PlaytimeManager playtimeManager;
 
-    public PlaytimeCommand(OceanPlaytimePlugin plugin, PlaytimeManager playtimeManager) {
+    public PlaytimeCommand(PlaytimePlugin plugin, PlaytimeManager playtimeManager) {
         this.plugin = plugin;
         this.playtimeManager = playtimeManager;
     }

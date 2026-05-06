@@ -1,12 +1,12 @@
-package me.moormxi.playtime;
+package com.github.sxnsh1ness.playtime;
 
-import me.moormxi.playtime.api.OceanPlaytimeApi;
-import me.moormxi.playtime.api.SimpleOceanPlaytimeApi;
-import me.moormxi.playtime.command.PlaytimeCommand;
-import me.moormxi.playtime.config.PluginSettings;
-import me.moormxi.playtime.database.DatabaseManager;
-import me.moormxi.playtime.manager.PlaytimeManager;
-import me.moormxi.playtime.placeholder.OceanPlaytimeExpansion;
+import com.github.sxnsh1ness.playtime.api.PlaytimeApi;
+import com.github.sxnsh1ness.playtime.api.SimplePlaytimeApi;
+import com.github.sxnsh1ness.playtime.command.PlaytimeCommand;
+import com.github.sxnsh1ness.playtime.config.PluginSettings;
+import com.github.sxnsh1ness.playtime.database.DatabaseManager;
+import com.github.sxnsh1ness.playtime.manager.PlaytimeManager;
+import com.github.sxnsh1ness.playtime.placeholder.PlaytimeExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.EventHandler;
@@ -19,12 +19,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-public final class OceanPlaytimePlugin extends JavaPlugin implements Listener {
+public final class PlaytimePlugin extends JavaPlugin implements Listener {
 
     private DatabaseManager databaseManager;
     private PlaytimeManager playtimeManager;
-    private OceanPlaytimeApi playtimeApi;
-    private OceanPlaytimeExpansion placeholderExpansion;
+    private PlaytimeApi playtimeApi;
+    private PlaytimeExpansion placeholderExpansion;
     private PluginSettings settings;
 
     @Override
@@ -42,10 +42,10 @@ public final class OceanPlaytimePlugin extends JavaPlugin implements Listener {
         }
 
         this.playtimeManager = new PlaytimeManager(this);
-        this.playtimeApi = new SimpleOceanPlaytimeApi(playtimeManager, databaseManager);
+        this.playtimeApi = new SimplePlaytimeApi(playtimeManager, databaseManager);
 
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getServicesManager().register(OceanPlaytimeApi.class, playtimeApi, this, ServicePriority.Normal);
+        getServer().getServicesManager().register(PlaytimeApi.class, playtimeApi, this, ServicePriority.Normal);
         registerPlaceholders();
 
         PlaytimeCommand command = new PlaytimeCommand(this, playtimeManager);
@@ -63,7 +63,7 @@ public final class OceanPlaytimePlugin extends JavaPlugin implements Listener {
             playtimeManager.handleJoin(player);
         }
 
-        getLogger().info("OceanPlaytime enabled.");
+        getLogger().info("Playtime enabled.");
     }
 
     @Override
@@ -86,7 +86,7 @@ public final class OceanPlaytimePlugin extends JavaPlugin implements Listener {
             return;
         }
 
-        this.placeholderExpansion = new OceanPlaytimeExpansion(this);
+        this.placeholderExpansion = new PlaytimeExpansion(this);
         if (placeholderExpansion.register()) {
             getLogger().info("Registered PlaceholderAPI placeholders.");
         }
@@ -110,7 +110,7 @@ public final class OceanPlaytimePlugin extends JavaPlugin implements Listener {
         return playtimeManager;
     }
 
-    public OceanPlaytimeApi getPlaytimeApi() {
+    public PlaytimeApi getPlaytimeApi() {
         return playtimeApi;
     }
 

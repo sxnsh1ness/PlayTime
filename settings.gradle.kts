@@ -1,1 +1,1 @@
-rootProject.name = "OceanPlaytime"
+rootProject.name = "Playtime"
