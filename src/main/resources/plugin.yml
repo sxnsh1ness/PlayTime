@@ -1,5 +1,5 @@
 name: Playtime
-version: 1.0.0
+version: 0.0.1
 main: com.github.sxnsh1ness.playtime.PlaytimePlugin
 api-version: '1.21'
 description: Standalone Playtime Tracking Plugin

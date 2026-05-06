@@ -42,7 +42,7 @@ gradlew.bat build
 2. Put the jar into your server `plugins` folder:
 
 ```text
-build/libs/Playtime-1.0.0.jar
+build/libs/Playtime-0.0.1.jar
 ```
 
 3. Restart the server.
@@ -239,5 +239,5 @@ public void onPlaytimeStop(PlayerPlaytimeStopEvent event) {
 The compiled jar will be created in:
 
 ```text
-build/libs/Playtime-1.0.0.jar
+build/libs/Playtime-0.0.1.jar
 ```
