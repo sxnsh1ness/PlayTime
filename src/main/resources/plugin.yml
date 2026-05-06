@@ -1,0 +1,13 @@
+name: OceanPlaytime
+version: 1.0.0
+main: me.moormxi.playtime.OceanPlaytimePlugin
+api-version: '1.21'
+description: Standalone Playtime Tracking Plugin
+softdepend:
+  - PlaceholderAPI
+commands:
+  playtime:
+    description: Shows server playtime.
+    usage: /playtime [player]
+    aliases:
+      - ptime

@@ -1,0 +1,3 @@
+# How often online players are saved to SQLite.
+# The minimum accepted value is 30 seconds.
+autosave-interval-seconds: 300
