@@ -1,13 +1,12 @@
-name: Playtime
+name: PlayTime
 version: 0.0.1
-main: com.github.sxnsh1ness.playtime.PlaytimePlugin
+main: com.github.sxnsh1ness.playtime.PlayTimePlugin
 api-version: '1.21'
-description: Standalone Playtime Tracking Plugin
+author: Sxnsh1ne
+description: Standalone PlayTime Tracking Plugin
 softdepend:
   - PlaceholderAPI
 commands:
   playtime:
-    description: Shows server playtime.
+    description: Shows player playtime.
     usage: /playtime [player]
-    aliases:
-      - ptime

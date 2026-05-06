@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
-public record PlayerPlaytime(
+public record PlayerPlayTime(
         UUID uuid,
         String name,
         Instant firstJoin,

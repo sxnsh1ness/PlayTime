@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class PlayerPlaytimeStartEvent extends Event {
+public final class PlayerPlayTimeStartEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -14,7 +14,7 @@ public final class PlayerPlaytimeStartEvent extends Event {
     private final String playerName;
     private final long startedAt;
 
-    public PlayerPlaytimeStartEvent(UUID uuid, String playerName, long startedAt) {
+    public PlayerPlayTimeStartEvent(UUID uuid, String playerName, long startedAt) {
         this.uuid = uuid;
         this.playerName = playerName;
         this.startedAt = startedAt;

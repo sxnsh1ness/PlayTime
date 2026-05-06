@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class PlayerPlaytimeStopEvent extends Event {
+public final class PlayerPlayTimeStopEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -16,7 +16,7 @@ public final class PlayerPlaytimeStopEvent extends Event {
     private final long totalMillis;
     private final long stoppedAt;
 
-    public PlayerPlaytimeStopEvent(UUID uuid, String playerName, long sessionMillis, long totalMillis, long stoppedAt) {
+    public PlayerPlayTimeStopEvent(UUID uuid, String playerName, long sessionMillis, long totalMillis, long stoppedAt) {
         this.uuid = uuid;
         this.playerName = playerName;
         this.sessionMillis = sessionMillis;

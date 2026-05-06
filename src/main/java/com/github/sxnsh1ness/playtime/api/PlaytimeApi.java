@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PlaytimeApi {
+public interface PlayTimeAPI {
 
-    long getPlaytimeMillis(UUID uuid);
+    long getPlayTimeMillis(UUID uuid);
 
-    Duration getPlaytime(UUID uuid);
+    Duration getPlayTime(UUID uuid);
 
-    String formatPlaytime(UUID uuid);
+    String formatPlayTime(UUID uuid);
 
-    Optional<PlayerPlaytime> getPlayer(UUID uuid);
+    Optional<PlayerPlayTime> getPlayer(UUID uuid);
 
-    Optional<PlayerPlaytime> getPlayer(String name);
+    Optional<PlayerPlayTime> getPlayer(String name);
 
-    List<PlayerPlaytime> getTop(int limit);
+    List<PlayerPlayTime> getTop(int limit);
 }

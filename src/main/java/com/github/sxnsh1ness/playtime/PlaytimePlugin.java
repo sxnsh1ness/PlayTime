@@ -1,12 +1,12 @@
 package com.github.sxnsh1ness.playtime;
 
-import com.github.sxnsh1ness.playtime.api.PlaytimeApi;
-import com.github.sxnsh1ness.playtime.api.SimplePlaytimeApi;
-import com.github.sxnsh1ness.playtime.command.PlaytimeCommand;
+import com.github.sxnsh1ness.playtime.api.PlayTimeAPI;
+import com.github.sxnsh1ness.playtime.api.SimplePlayTimeAPI;
+import com.github.sxnsh1ness.playtime.command.PlayTimeCommand;
 import com.github.sxnsh1ness.playtime.config.PluginSettings;
 import com.github.sxnsh1ness.playtime.database.DatabaseManager;
-import com.github.sxnsh1ness.playtime.manager.PlaytimeManager;
-import com.github.sxnsh1ness.playtime.placeholder.PlaytimeExpansion;
+import com.github.sxnsh1ness.playtime.manager.PlayTimeManager;
+import com.github.sxnsh1ness.playtime.placeholder.PlayTimeExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.EventHandler;
@@ -19,12 +19,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
 import java.util.logging.Level;
 
-public final class PlaytimePlugin extends JavaPlugin implements Listener {
+public final class PlayTimePlugin extends JavaPlugin implements Listener {
 
     private DatabaseManager databaseManager;
-    private PlaytimeManager playtimeManager;
-    private PlaytimeApi playtimeApi;
-    private PlaytimeExpansion placeholderExpansion;
+    private PlayTimeManager playtimeManager;
+    private PlayTimeAPI playtimeApi;
+    private PlayTimeExpansion placeholderExpansion;
     private PluginSettings settings;
 
     @Override
@@ -41,14 +41,14 @@ public final class PlaytimePlugin extends JavaPlugin implements Listener {
             return;
         }
 
-        this.playtimeManager = new PlaytimeManager(this);
-        this.playtimeApi = new SimplePlaytimeApi(playtimeManager, databaseManager);
+        this.playtimeManager = new PlayTimeManager(this);
+        this.playtimeApi = new SimplePlayTimeAPI(playtimeManager, databaseManager);
 
         getServer().getPluginManager().registerEvents(this, this);
-        getServer().getServicesManager().register(PlaytimeApi.class, playtimeApi, this, ServicePriority.Normal);
+        getServer().getServicesManager().register(PlayTimeAPI.class, playtimeApi, this, ServicePriority.Normal);
         registerPlaceholders();
 
-        PlaytimeCommand command = new PlaytimeCommand(this, playtimeManager);
+        PlayTimeCommand command = new PlayTimeCommand(this, playtimeManager);
         PluginCommand pluginCommand = getCommand("playtime");
         if (pluginCommand == null) {
             getLogger().severe("Command /playtime is missing from plugin.yml.");
@@ -63,7 +63,7 @@ public final class PlaytimePlugin extends JavaPlugin implements Listener {
             playtimeManager.handleJoin(player);
         }
 
-        getLogger().info("Playtime enabled.");
+        getLogger().info("PlayTime enabled.");
     }
 
     @Override
@@ -86,7 +86,7 @@ public final class PlaytimePlugin extends JavaPlugin implements Listener {
             return;
         }
 
-        this.placeholderExpansion = new PlaytimeExpansion(this);
+        this.placeholderExpansion = new PlayTimeExpansion(this);
         if (placeholderExpansion.register()) {
             getLogger().info("Registered PlaceholderAPI placeholders.");
         }
@@ -106,11 +106,11 @@ public final class PlaytimePlugin extends JavaPlugin implements Listener {
         return databaseManager;
     }
 
-    public PlaytimeManager getPlaytimeManager() {
+    public PlayTimeManager getPlayTimeManager() {
         return playtimeManager;
     }
 
-    public PlaytimeApi getPlaytimeApi() {
+    public PlayTimeAPI getPlayTimeAPI() {
         return playtimeApi;
     }
 

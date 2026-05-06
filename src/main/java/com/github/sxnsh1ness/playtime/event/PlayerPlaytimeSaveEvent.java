@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public final class PlayerPlaytimeSaveEvent extends Event {
+public final class PlayerPlayTimeSaveEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -17,7 +17,7 @@ public final class PlayerPlaytimeSaveEvent extends Event {
     private final long newTotalMillis;
     private final long savedAt;
 
-    public PlayerPlaytimeSaveEvent(
+    public PlayerPlayTimeSaveEvent(
             boolean async,
             UUID uuid,
             String playerName,

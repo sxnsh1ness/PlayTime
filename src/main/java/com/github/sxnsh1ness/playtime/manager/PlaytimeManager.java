@@ -1,9 +1,9 @@
 package com.github.sxnsh1ness.playtime.manager;
 
-import com.github.sxnsh1ness.playtime.PlaytimePlugin;
-import com.github.sxnsh1ness.playtime.event.PlayerPlaytimeSaveEvent;
-import com.github.sxnsh1ness.playtime.event.PlayerPlaytimeStartEvent;
-import com.github.sxnsh1ness.playtime.event.PlayerPlaytimeStopEvent;
+import com.github.sxnsh1ness.playtime.PlayTimePlugin;
+import com.github.sxnsh1ness.playtime.event.*;
+import com.github.sxnsh1ness.playtime.manager.model.PlayTimeEntry;
+import com.github.sxnsh1ness.playtime.manager.model.Session;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -13,14 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
-public final class PlaytimeManager {
+public final class PlayTimeManager {
 
-    private final PlaytimePlugin plugin;
+    private final PlayTimePlugin plugin;
     private final Map<UUID, Session> sessions = new ConcurrentHashMap<>();
 
-    public PlaytimeManager(PlaytimePlugin plugin) {
+    public PlayTimeManager(PlayTimePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -28,7 +27,7 @@ public final class PlaytimeManager {
         UUID uuid = player.getUniqueId();
         long now = System.currentTimeMillis();
         sessions.put(uuid, new Session(now));
-        Bukkit.getPluginManager().callEvent(new PlayerPlaytimeStartEvent(uuid, player.getName(), now));
+        Bukkit.getPluginManager().callEvent(new PlayerPlayTimeStartEvent(uuid, player.getName(), now));
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
                 plugin.getDatabaseManager().touchPlayer(uuid, player.getName(), now)
@@ -51,21 +50,21 @@ public final class PlaytimeManager {
         }
     }
 
-    public long getPlaytime(UUID uuid) {
-        long total = plugin.getDatabaseManager().getStoredPlaytime(uuid);
+    public long getPlayTime(UUID uuid) {
+        long total = plugin.getDatabaseManager().getStoredPlayTime(uuid);
         Session session = sessions.get(uuid);
         if (session == null) {
             return total;
         }
 
-        return total + Math.max(0L, System.currentTimeMillis() - session.savedUntil.get());
+        return total + Math.max(0L, System.currentTimeMillis() - session.savedUntil());
     }
 
-    public List<PlaytimeEntry> getTopPlaytime(int limit) {
-        List<PlaytimeEntry> result = new ArrayList<>();
-        var top = plugin.getDatabaseManager().getTopPlaytime(limit);
+    public List<PlayTimeEntry> getTopPlayTime(int limit) {
+        List<PlayTimeEntry> result = new ArrayList<>();
+        var top = plugin.getDatabaseManager().getTopPlayTime(limit);
         for (var record : top) {
-            result.add(new PlaytimeEntry(record.uuid(), record.name(), record.value()));
+            result.add(new PlayTimeEntry(record.uuid(), record.name(), record.value()));
         }
         return result;
     }
@@ -89,7 +88,7 @@ public final class PlaytimeManager {
         }
 
         long now = System.currentTimeMillis();
-        long previousSave = session.savedUntil.getAndSet(now);
+        long previousSave = session.getAndSetSavedUntil(now);
         long delta = Math.max(0L, now - previousSave);
         if (delta == 0L) {
             return;
@@ -104,11 +103,11 @@ public final class PlaytimeManager {
     }
 
     private void saveAndCallEvents(UUID uuid, String playerName, Session session, long now, long delta, boolean stopped) {
-        long previousTotal = plugin.getDatabaseManager().getStoredPlaytime(uuid);
+        long previousTotal = plugin.getDatabaseManager().getStoredPlayTime(uuid);
         long newTotal = previousTotal + delta;
 
-        plugin.getDatabaseManager().addPlaytime(uuid, playerName, session.joinedAt, now, delta);
-        Bukkit.getPluginManager().callEvent(new PlayerPlaytimeSaveEvent(
+        plugin.getDatabaseManager().addPlayTime(uuid, playerName, session.joinedAt(), now, delta);
+        Bukkit.getPluginManager().callEvent(new PlayerPlayTimeSaveEvent(
                 !Bukkit.isPrimaryThread(),
                 uuid,
                 playerName,
@@ -119,26 +118,14 @@ public final class PlaytimeManager {
         ));
 
         if (stopped) {
-            Bukkit.getPluginManager().callEvent(new PlayerPlaytimeStopEvent(
+            Bukkit.getPluginManager().callEvent(new PlayerPlayTimeStopEvent(
                     uuid,
                     playerName,
-                    now - session.joinedAt,
+                    now - session.joinedAt(),
                     newTotal,
                     now
             ));
         }
     }
 
-    private static final class Session {
-        private final long joinedAt;
-        private final AtomicLong savedUntil;
-
-        private Session(long joinedAt) {
-            this.joinedAt = joinedAt;
-            this.savedUntil = new AtomicLong(joinedAt);
-        }
-    }
-
-    public record PlaytimeEntry(UUID uuid, String name, long time) {
-    }
 }

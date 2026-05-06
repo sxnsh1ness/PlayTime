@@ -1,18 +1,17 @@
-# Playtime
+# PlayTime
 
-Playtime is a standalone Paper plugin for tracking how long players have played on a server.
+PlayTime is a standalone Paper plugin for tracking how long players have played on a server.
 
 The plugin stores data in SQLite, provides `/playtime` commands, PlaceholderAPI placeholders, custom Bukkit events, and a small developer API for reward plugins and other integrations.
 
 ## Features
 
 - Tracks playtime from the player's first join.
-- Saves data to SQLite: `plugins/Playtime/playtime.db`.
+- Saves data to SQLite: `plugins/PlayTime/playtime.db`.
 - Saves on quit, server shutdown, and by configurable autosave interval.
 - Commands:
   - `/playtime`
   - `/playtime <player>`
-  - `/ptime`
 - Configurable messages in `messages.yml`.
 - Configurable autosave interval in `config.yml`.
 - PlaceholderAPI support.
@@ -21,8 +20,8 @@ The plugin stores data in SQLite, provides `/playtime` commands, PlaceholderAPI 
 
 ## Requirements
 
-- Paper `1.21.1`
-- Java `21`
+- Paper `1.21.1+`
+- Java `21+`
 - Optional: PlaceholderAPI for placeholders
 
 ## Installation
@@ -42,7 +41,7 @@ gradlew.bat build
 2. Put the jar into your server `plugins` folder:
 
 ```text
-build/libs/Playtime-0.0.1.jar
+build/libs/PlayTime-0.0.1.jar
 ```
 
 3. Restart the server.
@@ -82,58 +81,57 @@ Messages support MiniMessage formatting.
 | --- | --- |
 | `/playtime` | Shows your own playtime. |
 | `/playtime <player>` | Shows another player's stored playtime. |
-| `/ptime` | Alias for `/playtime`. |
 
 ## PlaceholderAPI
 
-If PlaceholderAPI is installed, Playtime registers the `Playtime` expansion automatically.
+If PlaceholderAPI is installed, PlayTime registers the `PlayTime` expansion automatically.
 
 Available placeholders:
 
 | Placeholder | Description |
 | --- | --- |
-| `%Playtime_time%` | Formatted playtime. |
-| `%Playtime_formatted%` | Same as `time`. |
-| `%Playtime_millis%` | Total playtime in milliseconds. |
-| `%Playtime_seconds%` | Total playtime in seconds. |
-| `%Playtime_minutes%` | Total playtime in minutes. |
-| `%Playtime_hours%` | Total playtime in hours. |
-| `%Playtime_days%` | Total playtime in days. |
-| `%Playtime_first_join%` | First tracked join time. |
-| `%Playtime_last_seen%` | Last seen time. |
+| `%playtime_time%` | Formatted playtime. |
+| `%playtime_formatted%` | Same as `time`. |
+| `%playtime_millis%` | Total playtime in milliseconds. |
+| `%playtime_seconds%` | Total playtime in seconds. |
+| `%playtime_minutes%` | Total playtime in minutes. |
+| `%playtime_hours%` | Total playtime in hours. |
+| `%playtime_days%` | Total playtime in days. |
+| `%playtime_first_join%` | First tracked join time. |
+| `%playtime_last_seen%` | Last seen time. |
 
 Example reward condition in another plugin:
 
 ```text
-%Playtime_hours% >= 10
+%playtime_hours% >= 10
 ```
 
 ## Developer API
 
-Playtime exposes its API through Bukkit `ServicesManager`.
+PlayTime exposes its API through Bukkit `ServicesManager`.
 
-Add Playtime as a compile-only dependency in your plugin project, then declare a soft dependency in your `plugin.yml`.
+Add PlayTime as a compile-only dependency in your plugin project, then declare a soft dependency in your `plugin.yml`.
 
 ```yaml
 softdepend:
-  - Playtime
+  - PlayTime
 ```
 
 ### Getting the API
 
 ```java
-import com.github.sxnsh1ness.playtime.api.PlaytimeApi;
-import com.github.sxnsh1ness.playtime.api.PlaytimeProvider;
+import com.github.sxnsh1ness.playtime.api.PlayTimeAPI;
+import com.github.sxnsh1ness.playtime.api.providers.PlayTimeProvider;
 
-PlaytimeProvider.get().ifPresent(api -> {
-    long millis = api.getPlaytimeMillis(player.getUniqueId());
+PlayTimeProvider.get().ifPresent(api -> {
+    long millis = api.getPlayTimeMillis(player.getUniqueId());
 });
 ```
 
 Or directly through Bukkit:
 
 ```java
-PlaytimeApi api = Bukkit.getServicesManager().load(PlaytimeApi.class);
+PlayTimeAPI api = Bukkit.getServicesManager().load(PlayTimeAPI.class);
 if (api == null) {
     return;
 }
@@ -142,24 +140,24 @@ if (api == null) {
 ### API Methods
 
 ```java
-long getPlaytimeMillis(UUID uuid);
-Duration getPlaytime(UUID uuid);
-String formatPlaytime(UUID uuid);
+long getPlayTimeMillis(UUID uuid);
+Duration getPlayTime(UUID uuid);
+String formatPlayTime(UUID uuid);
 
-Optional<PlayerPlaytime> getPlayer(UUID uuid);
-Optional<PlayerPlaytime> getPlayer(String name);
+Optional<PlayerPlayTime> getPlayer(UUID uuid);
+Optional<PlayerPlayTime> getPlayer(String name);
 
-List<PlayerPlaytime> getTop(int limit);
+List<PlayerPlayTime> getTop(int limit);
 ```
 
 ### Reward Example
 
 ```java
-import com.github.sxnsh1ness.playtime.api.PlaytimeProvider;
+import com.github.sxnsh1ness.playtime.api.providers.PlayTimeProvider;
 
 public void tryGiveReward(Player player) {
-    PlaytimeProvider.get().ifPresent(api -> {
-        if (api.getPlaytime(player.getUniqueId()).toHours() >= 10) {
+    PlayTimeProvider.get().ifPresent(api -> {
+        if (api.getPlayTime(player.getUniqueId()).toHours() >= 10) {
             // Give a reward for 10 hours of playtime.
         }
     });
@@ -179,31 +177,31 @@ api.getPlayer(player.getUniqueId()).ifPresent(data -> {
 });
 ```
 
-### Top Playtime Example
+### Top PlayTime Example
 
 ```java
-for (PlayerPlaytime entry : api.getTop(10)) {
+for (PlayerPlayTime entry : api.getTop(10)) {
     Bukkit.getLogger().info(entry.name() + ": " + entry.playtime().toHours() + " hours");
 }
 ```
 
 ## Custom Events
 
-Playtime also exposes Bukkit events for developers who need to react to playtime changes.
+PlayTime also exposes Bukkit events for developers who need to react to playtime changes.
 
-### PlayerPlaytimeStartEvent
+### PlayerPlayTimeStartEvent
 
-Called when Playtime starts tracking a player's current session.
+Called when PlayTime starts tracking a player's current session.
 
 ```java
 @EventHandler
-public void onPlaytimeStart(PlayerPlaytimeStartEvent event) {
+public void onPlayTimeStart(PlayerPlayTimeStartEvent event) {
     UUID uuid = event.getUuid();
     String name = event.getPlayerName();
 }
 ```
 
-### PlayerPlaytimeSaveEvent
+### PlayerPlayTimeSaveEvent
 
 Called after a playtime delta is saved to SQLite.
 
@@ -211,20 +209,20 @@ This event can be asynchronous. Check `event.isAsynchronous()` before using Bukk
 
 ```java
 @EventHandler
-public void onPlaytimeSave(PlayerPlaytimeSaveEvent event) {
+public void onPlayTimeSave(PlayerPlayTimeSaveEvent event) {
     long previous = event.getPreviousTotalMillis();
     long delta = event.getSavedDeltaMillis();
     long total = event.getNewTotalMillis();
 }
 ```
 
-### PlayerPlaytimeStopEvent
+### PlayerPlayTimeStopEvent
 
 Called when a tracked session ends, usually on player quit.
 
 ```java
 @EventHandler
-public void onPlaytimeStop(PlayerPlaytimeStopEvent event) {
+public void onPlayTimeStop(PlayerPlayTimeStopEvent event) {
     long sessionMillis = event.getSessionMillis();
     long totalMillis = event.getTotalMillis();
 }
@@ -239,5 +237,5 @@ public void onPlaytimeStop(PlayerPlaytimeStopEvent event) {
 The compiled jar will be created in:
 
 ```text
-build/libs/Playtime-0.0.1.jar
+build/libs/PlayTime-{VERSION}.jar
 ```

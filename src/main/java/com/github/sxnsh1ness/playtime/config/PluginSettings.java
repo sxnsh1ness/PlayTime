@@ -1,6 +1,6 @@
 package com.github.sxnsh1ness.playtime.config;
 
-import com.github.sxnsh1ness.playtime.PlaytimePlugin;
+import com.github.sxnsh1ness.playtime.PlayTimePlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,7 +14,7 @@ public final class PluginSettings {
 
     private static final long MIN_AUTOSAVE_SECONDS = 30L;
 
-    private final PlaytimePlugin plugin;
+    private final PlayTimePlugin plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
     private long autosaveIntervalSeconds;
@@ -29,7 +29,7 @@ public final class PluginSettings {
     private String secondsFormat;
     private String separator;
 
-    public PluginSettings(PlaytimePlugin plugin) {
+    public PluginSettings(PlayTimePlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -69,11 +69,11 @@ public final class PluginSettings {
         return parse(commandUsageMessage, Map.of("usage", usage));
     }
 
-    public Component selfPlaytime(String time) {
+    public Component selfPlayTime(String time) {
         return parse(selfPlaytimeMessage, Map.of("time", time));
     }
 
-    public Component otherPlaytime(String player, String time) {
+    public Component otherPlayTime(String player, String time) {
         return parse(otherPlaytimeMessage, Map.of("player", player, "time", time));
     }
 

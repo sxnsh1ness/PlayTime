@@ -1,14 +1,15 @@
 package com.github.sxnsh1ness.playtime.command;
 
-import com.github.sxnsh1ness.playtime.PlaytimePlugin;
-import com.github.sxnsh1ness.playtime.database.DatabaseManager;
-import com.github.sxnsh1ness.playtime.manager.PlaytimeManager;
+import com.github.sxnsh1ness.playtime.PlayTimePlugin;
+import com.github.sxnsh1ness.playtime.database.model.PlayTimeRecord;
+import com.github.sxnsh1ness.playtime.manager.PlayTimeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,32 +17,32 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public final class PlaytimeCommand implements CommandExecutor, TabCompleter {
+public final class PlayTimeCommand implements CommandExecutor, TabCompleter {
 
-    private final PlaytimePlugin plugin;
-    private final PlaytimeManager playtimeManager;
+    private final PlayTimePlugin plugin;
+    private final PlayTimeManager playtimeManager;
 
-    public PlaytimeCommand(PlaytimePlugin plugin, PlaytimeManager playtimeManager) {
+    public PlayTimeCommand(PlayTimePlugin plugin, PlayTimeManager playtimeManager) {
         this.plugin = plugin;
         this.playtimeManager = playtimeManager;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, String[] args) {
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage(plugin.getSettings().consoleUsage("/" + label + " <player>"));
                 return true;
             }
 
-            sendPlaytime(sender, player.getUniqueId(), player.getName(), true);
+            sendPlayTime(sender, player.getUniqueId(), player.getName(), true);
             return true;
         }
 
         if (args.length == 1) {
             Player onlinePlayer = Bukkit.getPlayerExact(args[0]);
             if (onlinePlayer != null) {
-                sendPlaytime(sender, onlinePlayer.getUniqueId(), onlinePlayer.getName(), false);
+                sendPlayTime(sender, onlinePlayer.getUniqueId(), onlinePlayer.getName(), false);
                 return true;
             }
 
@@ -53,36 +54,36 @@ public final class PlaytimeCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private void sendPlaytime(CommandSender sender, UUID uuid, String name, boolean self) {
+    private void sendPlayTime(CommandSender sender, UUID uuid, String name, boolean self) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            long playtime = playtimeManager.getPlaytime(uuid);
+            long playtime = playtimeManager.getPlayTime(uuid);
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (self) {
-                    sender.sendMessage(plugin.getSettings().selfPlaytime(playtimeManager.formatTime(playtime)));
+                    sender.sendMessage(plugin.getSettings().selfPlayTime(playtimeManager.formatTime(playtime)));
                     return;
                 }
 
-                sender.sendMessage(plugin.getSettings().otherPlaytime(name, playtimeManager.formatTime(playtime)));
+                sender.sendMessage(plugin.getSettings().otherPlayTime(name, playtimeManager.formatTime(playtime)));
             });
         });
     }
 
     private void findAndSendOfflinePlaytime(CommandSender sender, String query) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            DatabaseManager.PlaytimeRecord record = plugin.getDatabaseManager().getByName(query);
+            PlayTimeRecord record = plugin.getDatabaseManager().getByName(query);
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (record == null) {
                     sender.sendMessage(plugin.getSettings().playerNotFound(query));
                     return;
                 }
 
-                sender.sendMessage(plugin.getSettings().otherPlaytime(record.name(), playtimeManager.formatTime(record.totalMs())));
+                sender.sendMessage(plugin.getSettings().otherPlayTime(record.name(), playtimeManager.formatTime(record.totalMs())));
             });
         });
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NonNull CommandSender sender, @NonNull Command command, @NonNull String alias, String[] args) {
         if (args.length != 1) {
             return Collections.emptyList();
         }

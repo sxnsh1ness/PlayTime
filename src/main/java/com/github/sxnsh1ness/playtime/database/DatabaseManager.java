@@ -1,6 +1,8 @@
 package com.github.sxnsh1ness.playtime.database;
 
-import com.github.sxnsh1ness.playtime.PlaytimePlugin;
+import com.github.sxnsh1ness.playtime.PlayTimePlugin;
+import com.github.sxnsh1ness.playtime.database.model.PlayTimeRecord;
+import com.github.sxnsh1ness.playtime.database.model.TopRecord;
 
 import java.io.File;
 import java.sql.Connection;
@@ -17,11 +19,11 @@ import java.util.logging.Level;
 
 public final class DatabaseManager implements AutoCloseable {
 
-    private final PlaytimePlugin plugin;
+    private final PlayTimePlugin plugin;
     private final String url;
     private Connection connection;
 
-    public DatabaseManager(PlaytimePlugin plugin) {
+    public DatabaseManager(PlayTimePlugin plugin) {
         this.plugin = plugin;
         if (!plugin.getDataFolder().exists() && !plugin.getDataFolder().mkdirs()) {
             plugin.getLogger().warning("Could not create plugin data folder: " + plugin.getDataFolder());
@@ -111,7 +113,7 @@ public final class DatabaseManager implements AutoCloseable {
         }
     }
 
-    public synchronized void addPlaytime(UUID uuid, String name, long firstJoin, long lastSeen, long deltaMs) {
+    public synchronized void addPlayTime(UUID uuid, String name, long firstJoin, long lastSeen, long deltaMs) {
         long safeDelta = Math.max(0L, deltaMs);
         String sql = """
                 INSERT INTO playtime (uuid, name, first_join, last_seen, total_ms)
@@ -138,7 +140,7 @@ public final class DatabaseManager implements AutoCloseable {
         }
     }
 
-    public synchronized PlaytimeRecord getByUuid(UUID uuid) {
+    public synchronized PlayTimeRecord getByUuid(UUID uuid) {
         String sql = "SELECT uuid, name, first_join, last_seen, total_ms FROM playtime WHERE uuid = ?";
 
         try (PreparedStatement statement = getConnection().prepareStatement(sql)) {
@@ -156,7 +158,7 @@ public final class DatabaseManager implements AutoCloseable {
         return null;
     }
 
-    public synchronized PlaytimeRecord getByName(String name) {
+    public synchronized PlayTimeRecord getByName(String name) {
         String sql = """
                 SELECT uuid, name, first_join, last_seen, total_ms
                 FROM playtime
@@ -180,12 +182,12 @@ public final class DatabaseManager implements AutoCloseable {
         return null;
     }
 
-    public long getStoredPlaytime(UUID uuid) {
-        PlaytimeRecord record = getByUuid(uuid);
+    public long getStoredPlayTime(UUID uuid) {
+        PlayTimeRecord record = getByUuid(uuid);
         return record == null ? 0L : record.totalMs();
     }
 
-    public List<TopRecord> getTopPlaytime(int limit) {
+    public List<TopRecord> getTopPlayTime(int limit) {
         List<TopRecord> top = new ArrayList<>();
 
         synchronized (this) {
@@ -210,8 +212,8 @@ public final class DatabaseManager implements AutoCloseable {
         return top;
     }
 
-    private PlaytimeRecord readRecord(ResultSet resultSet) throws SQLException {
-        return new PlaytimeRecord(
+    private PlayTimeRecord readRecord(ResultSet resultSet) throws SQLException {
+        return new PlayTimeRecord(
                 UUID.fromString(resultSet.getString("uuid")),
                 resultSet.getString("name"),
                 resultSet.getLong("first_join"),
@@ -235,9 +237,4 @@ public final class DatabaseManager implements AutoCloseable {
         }
     }
 
-    public record PlaytimeRecord(UUID uuid, String name, long firstJoin, long lastSeen, long totalMs) {
-    }
-
-    public record TopRecord(UUID uuid, String name, long value) {
-    }
 }

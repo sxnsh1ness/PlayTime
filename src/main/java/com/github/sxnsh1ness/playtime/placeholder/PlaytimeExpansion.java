@@ -1,8 +1,8 @@
 package com.github.sxnsh1ness.playtime.placeholder;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import com.github.sxnsh1ness.playtime.PlaytimePlugin;
-import com.github.sxnsh1ness.playtime.database.DatabaseManager;
+import com.github.sxnsh1ness.playtime.PlayTimePlugin;
+import com.github.sxnsh1ness.playtime.database.model.PlayTimeRecord;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,25 +11,25 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public final class PlaytimeExpansion extends PlaceholderExpansion {
+public final class PlayTimeExpansion extends PlaceholderExpansion {
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
             .withZone(ZoneId.systemDefault());
 
-    private final PlaytimePlugin plugin;
+    private final PlayTimePlugin plugin;
 
-    public PlaytimeExpansion(PlaytimePlugin plugin) {
+    public PlayTimeExpansion(PlayTimePlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public @NotNull String getIdentifier() {
-        return "Playtime";
+        return "playtime";
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return "sxnsh1ness";
+        return "Sxnsh1ne";
     }
 
     @Override
@@ -50,11 +50,11 @@ public final class PlaytimeExpansion extends PlaceholderExpansion {
             player.getUniqueId();
         }
 
-        long millis = plugin.getPlaytimeManager().getPlaytime(player.getUniqueId());
+        long millis = plugin.getPlayTimeManager().getPlayTime(player.getUniqueId());
         Duration duration = Duration.ofMillis(millis);
 
         return switch (params.toLowerCase()) {
-            case "time", "formatted" -> plugin.getPlaytimeManager().formatTime(millis);
+            case "time", "formatted" -> plugin.getPlayTimeManager().formatTime(millis);
             case "millis", "milliseconds" -> Long.toString(millis);
             case "seconds" -> Long.toString(duration.toSeconds());
             case "minutes" -> Long.toString(duration.toMinutes());
@@ -67,7 +67,7 @@ public final class PlaytimeExpansion extends PlaceholderExpansion {
     }
 
     private String formatFirstJoin(OfflinePlayer player) {
-        DatabaseManager.PlaytimeRecord record = plugin.getDatabaseManager().getByUuid(player.getUniqueId());
+        PlayTimeRecord record = plugin.getDatabaseManager().getByUuid(player.getUniqueId());
         if (record == null || record.firstJoin() <= 0L) {
             return "";
         }
@@ -75,7 +75,7 @@ public final class PlaytimeExpansion extends PlaceholderExpansion {
     }
 
     private String formatLastSeen(OfflinePlayer player) {
-        DatabaseManager.PlaytimeRecord record = plugin.getDatabaseManager().getByUuid(player.getUniqueId());
+        PlayTimeRecord record = plugin.getDatabaseManager().getByUuid(player.getUniqueId());
         if (record == null || record.lastSeen() <= 0L) {
             return "";
         }
